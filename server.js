@@ -4,50 +4,29 @@ import express from 'express'
 import socket from './lib/socket'
 import routes from './lib/routes'
 import config from './config.json'
-import { NotFound } from './lib/utils'
+import passport from 'passport'
 
 const port = (process.env.PORT || config.port)
 
 //Setup Express
-const server = express.createServer()
+const app = express()
 
-server.configure(() => {
-    server.set('views', __dirname + '/views')
-    server.set('view options', { layout: false })
-    server.use(connect.bodyParser({ keepExtensions: true, uploadDir: __dirname + '/uploads' }))
-    server.use(express.cookieParser())
-    server.use(express.session({ secret: "shhhhhhhhh!"}))
-    server.use(connect.static(__dirname + '/static'))
-    server.use(connect.static(__dirname + '/uploads'))
-    server.use(server.router)
-})
+app.set('views', __dirname + '/views')
+app.set('view options', { layout: false })
+app.set('superSecret', config.secret);
+app.use(connect.bodyParser({ keepExtensions: true, uploadDir: __dirname + '/uploads' }))
+app.use(connect.cookieParser())
+app.use(connect.static(__dirname + '/static'))
+app.use(connect.static(__dirname + '/uploads'))
+app.use(passport.initialize());
+app.use(passport.session());
 
-//setup the errors
-server.error((err, req, res, next) => {
-  if (err instanceof NotFound) {
-    res.render('404.jade', {
-      locals: {
-        title : '404 - Not Found',
-      },
-      status: 404
-    })
-  } else {
-    res.render('500.jade', {
-      locals: {
-        title : 'The Server Encountered an Error',
-        error: err,
-      },
-      status: 500
-    })
-  }
-})
-
-server.listen(port)
+app.listen(port, () => {
+  console.log('Listening on port', port);
+});
 
 //Socket.IO
-socket(server)
+socket(app)
 
 // ROUTES
-routes(server)
-
-console.log('Listening on http://localhost:' + port )
+routes(app, express)

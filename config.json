@@ -1,4 +1,7 @@
 {
-  "version": "v0.6.6",
-  "port": 3000
+  "version": "v0.0.1",
+  "port": 3000,
+  "secret": "startup",
+  "FACEBOOK_APP_ID": "1768184633460683",
+  "FACEBOOK_APP_SECRET": "3848a7fd314a95c6653ecdbcc53a796a"
 }
