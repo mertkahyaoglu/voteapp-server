@@ -2,6 +2,7 @@
   "name": "startup-server",
   "description": "startup-server",
   "main": "dist",
+  "private": true,
   "scripts": {
     "dev": "nodemon --config nodemon.json --exec \"babel-node server.js --presets es2015,stage-0\"",
     "build": "babel server.js -s -D -d dist --presets es2015,stage-0",
@@ -9,7 +10,7 @@
     "prestart": "npm run -s build",
     "test": "eslint src"
   },
-  "author": "YOUR NAME <your@emailaddress.com>",
+  "author": "Mert Kahyaoğlu",
   "version": "0.0.1",
   "dependencies": {
     "body-parser": "^1.15.2",
